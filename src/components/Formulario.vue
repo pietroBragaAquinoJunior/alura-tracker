@@ -2,11 +2,11 @@
     <div class="box">
         <div class="columns">
             <div class="column is-8" role="form" aria-label="Formulário para criação de uma nova tarefa">
-                <input type="text" class="input" placeholder="Qual tarefa você deseja iniciar?">
+                <input type="text" class="input" placeholder="Qual tarefa você deseja iniciar?" v-model="descricao">
             </div>
             <div>
                 <div class="column">
-                    <TemporizadorPrincipal />
+                    <TemporizadorPrincipal @ao-temporizador-finalizado="finalizarTarefa" />
                 </div>
             </div>
         </div>
@@ -19,7 +19,22 @@ import TemporizadorPrincipal from './TemporizadorPrincipal.vue';
 
 export default defineComponent({
     name: "FormularioPrincipal",
-    components: { TemporizadorPrincipal }
+    emits: ['aoSalvarTarefa'],
+    components: { TemporizadorPrincipal },
+    data () {
+        return {
+            descricao: ''
+        }
+    },
+    methods : {
+        finalizarTarefa(tempoDecorrido: number) : void{
+            this.$emit('aoSalvarTarefa', {
+                duracaoEmSegundos: tempoDecorrido,
+                descricao: this.descricao
+            })
+            this.descricao = ''
+        }
+    }
 })
 </script>
 
